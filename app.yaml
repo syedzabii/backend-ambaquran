@@ -1,0 +1,31 @@
+runtime: nodejs20
+
+env: standard
+instance_class: F1
+
+env_variables:
+  TZ: "Asia/Kolkata"
+  MONGO_URI: mongodb+srv://syed:Test321@cluster0.zn73bsk.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
+  GCP_PID: pelagic-hope-444410-f9
+  GCP_BUCKET: madrassa-image-uploads-students
+  GCP_FILEPATH: config/gcp-credentials.json
+  JWT_SECRET: aofjq3@R$$#R@#gf
+  NODE_ENV: production
+  FRONTEND_URI_WEBSITE: https://ambaquran.com
+  FRONTEND_URI_DASHBOARD: https://dashboard.ambaquran.com
+
+handlers:
+  - url: /.*
+    secure: always
+    script: auto
+
+
+automatic_scaling:
+  min_instances: 0 # Perfect - no always-on instances
+  max_instances: 1 # Keep at 1 for now
+  target_cpu_utilization: 0.8 # Higher threshold before scaling
+  target_throughput_utilization: 0.9 # Handle more requests per instance
+  max_idle_instances: 0 # Don't keep idle instances running
+  min_idle_instances: 0 # Force complete shutdown when not in use
+  max_pending_latency: 15s # Allow longer wait times to avoid spinning up instances
+  min_pending_latency: 5s # Be more patient before creating new instances
