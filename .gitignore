@@ -27,3 +27,4 @@ students-data.json
 config/gcp-credentials.json 
 config/gcp-credentials.json 
 app.yaml 
+*.md
