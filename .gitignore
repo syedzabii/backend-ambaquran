@@ -26,3 +26,4 @@ students-data.json
 *.sw?
 config/gcp-credentials.json 
 config/gcp-credentials.json 
+app.yaml 
