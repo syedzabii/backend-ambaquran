@@ -91,7 +91,7 @@ export const getAllTeachers = async (req, res, next) => {
     // Build query object
     const query = {};
     if (status) {
-      query.status = status;
+      query.status = status.toUpperCase();
     }
 
     const teachers = await Teacher.find(query).sort({ createdAt: -1 });
@@ -115,7 +115,7 @@ export const getTeachersByPagination = async (req, res, next) => {
     // Build query object
     const query = {};
     if (status) {
-      query.status = status;
+      query.status = status.toUpperCase();
     }
 
     const teachers = await Teacher.find(query)
@@ -161,13 +161,22 @@ export const getTeacherById = async (req, res, next) => {
 export const updateTeacherStatus = async (req, res, next) => {
   try {
     const { status } = req.body;
+    if (!status) {
+      return next(new ErrorHandler("Status is required", 400));
+    }
+
+    const formattedStatus = status.toUpperCase();
+    if (!["PENDING", "APPROVED", "REJECTED"].includes(formattedStatus)) {
+      return next(new ErrorHandler("Invalid status value. Must be PENDING, APPROVED, or REJECTED", 400));
+    }
+
     const teacher = await Teacher.findById(req.params.id);
 
     if (!teacher) {
       return next(new ErrorHandler("Teacher not found", 404));
     }
 
-    teacher.status = status;
+    teacher.status = formattedStatus;
     await teacher.save();
 
     res.status(200).json({

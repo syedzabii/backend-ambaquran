@@ -105,8 +105,9 @@ const teacherSchema = new mongoose.Schema({
   },
   status: {
     type: String,
-    default: "pending_approval",
-    enum: ["pending_approval", "approved", "rejected", "active", "inactive"],
+    enum: ["PENDING", "APPROVED", "REJECTED"],
+    default: "PENDING",
+    index: true,
   },
   registrationDate: {
     type: Date,

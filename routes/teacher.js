@@ -16,6 +16,7 @@ const router = express.Router();
 router.post("/register", rateLimitTeacherRegistration, validateTeacherRegistration, registerTeacher);
 
 // Protected routes (require authentication)
+router.get("/", isAuthenticated, getTeachersByPagination);
 router.get("/all", isAuthenticated, getAllTeachers);
 router.get("/pagination", isAuthenticated, getTeachersByPagination);
 router.get("/:id", isAuthenticated, getTeacherById);
