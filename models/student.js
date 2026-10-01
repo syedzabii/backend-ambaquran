@@ -2,11 +2,33 @@ import mongoose from "mongoose";
 
 const studentSchema = new mongoose.Schema(
   {
-    studentName: { type: String, required: true, trim: true },
-    email: { type: String, sparse: true, unique: true, lowercase: true },
+    studentName: {
+      type: String,
+      required: [true, "Student name is required"],
+      trim: true,
+    },
+    email: {
+      type: String,
+      sparse: true,
+      unique: true,
+      lowercase: true,
+      trim: true,
+      match: [/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/, "Please enter a valid email address"],
+    },
     phoneNumber: { type: String, default: "N/A" },
-    age: { type: Number, required: true },
-    gender: { type: String, enum: ["Male", "Female", "Other"], required: true },
+    age: {
+      type: Number,
+      required: [true, "Age is required"],
+      min: [1, "Age must be a valid positive number"],
+    },
+    gender: {
+      type: String,
+      required: [true, "Gender is required"],
+      enum: {
+        values: ["Male", "Female", "Other"],
+        message: "Gender must be one of: Male, Female, Other",
+      },
+    },
     education: { type: String, default: "Not Specified" },
     parentName: { type: String, default: "N/A" },
     city: { type: String, default: "N/A" },

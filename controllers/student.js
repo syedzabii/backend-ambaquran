@@ -68,6 +68,26 @@ export const registerStudent = async (req, res, next) => {
       student,
     });
   } catch (error) {
+    if (error.name === "ValidationError") {
+      const errors = Object.keys(error.errors).map((field) => ({
+        field,
+        message: error.errors[field].message,
+      }));
+
+      return res.status(400).json({
+        success: false,
+        message: "Validation failed",
+        errors,
+      });
+    }
+
+    if (error.code === 11000) {
+      return res.status(409).json({
+        success: false,
+        message: "A student registration with this email already exists",
+      });
+    }
+
     return next(new ErrorHandler(error.message, 500));
   }
 };
