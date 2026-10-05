@@ -9,11 +9,9 @@ const studentSchema = new mongoose.Schema(
     },
     email: {
       type: String,
-      sparse: true,
-      unique: true,
       lowercase: true,
       trim: true,
-      match: [/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/, "Please enter a valid email address"],
+      match: [/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,})+$/, "Please enter a valid email address"],
     },
     phoneNumber: { type: String, default: "N/A" },
     age: {
@@ -49,4 +47,7 @@ const studentSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-export const Student = mongoose.model("Student", studentSchema);
+export const Student = mongoose.model("Student", studentSchema);
+
+// Drop legacy email unique index if present in MongoDB
+Student.collection.dropIndex("email_1").catch(() => {});

@@ -35,7 +35,7 @@ export const validateTeacherRegistration = (req, res, next) => {
     if (!email || email.trim().length === 0) {
       errors.push({ field: "email", message: "Email is required" });
     } else {
-      const emailRegex = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
+      const emailRegex = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,})+$/;
       if (!emailRegex.test(email)) {
         errors.push({ field: "email", message: "Please enter a valid email" });
       }

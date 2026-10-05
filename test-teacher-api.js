@@ -81,8 +81,8 @@ async function testTeacherRegistration() {
 
   console.log('\n' + '='.repeat(50) + '\n');
 
-  // Test 3: Duplicate email registration
-  console.log('Test 3: Duplicate Email Registration');
+  // Test 3: Duplicate email registration (Allowed)
+  console.log('Test 3: Duplicate Email Registration (Should succeed)');
   try {
     const response = await fetch(`${API_BASE_URL}/register`, {
       method: 'POST',

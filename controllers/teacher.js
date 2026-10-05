@@ -19,20 +19,11 @@ export const registerTeacher = async (req, res, next) => {
       termsAccepted,
     } = req.body;
 
-    // Check if email already exists
-    const existingTeacher = await Teacher.findOne({ email: email.toLowerCase() });
-    if (existingTeacher) {
-      return res.status(409).json({
-        success: false,
-        message: "Email already exists",
-      });
-    }
-
     // Create new teacher
     const teacher = await Teacher.create({
       firstName,
       lastName,
-      email,
+      email: email ? email.toLowerCase().trim() : email,
       phone,
       age,
       gender,
@@ -68,14 +59,6 @@ export const registerTeacher = async (req, res, next) => {
         success: false,
         message: "Validation failed",
         errors,
-      });
-    }
-
-    // Handle duplicate key error (email already exists)
-    if (error.code === 11000) {
-      return res.status(409).json({
-        success: false,
-        message: "Email already exists",
       });
     }
 

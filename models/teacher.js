@@ -14,10 +14,9 @@ const teacherSchema = new mongoose.Schema({
   email: {
     type: String,
     required: [true, "Email is required"],
-    unique: true,
     lowercase: true,
     trim: true,
-    match: [/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/, "Please enter a valid email"],
+    match: [/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,})+$/, "Please enter a valid email"],
   },
   phone: {
     type: String,
@@ -117,7 +116,7 @@ const teacherSchema = new mongoose.Schema({
   timestamps: true,
 });
 
-// Create compound index for email uniqueness
-teacherSchema.index({ email: 1 }, { unique: true });
-
 export const Teacher = mongoose.model("Teacher", teacherSchema);
+
+// Drop legacy email unique index if present in MongoDB
+Teacher.collection.dropIndex("email_1").catch(() => {});

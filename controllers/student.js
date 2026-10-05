@@ -21,20 +21,10 @@ export const registerStudent = async (req, res, next) => {
       return next(new ErrorHandler("Please fill in all required fields (name, age, gender)", 400));
     }
 
-    // Check if email already exists if provided
+    // Process email if provided
     let userEmail;
     if (email && email.trim()) {
       userEmail = email.toLowerCase().trim();
-      const existingStudent = await Student.findOne({ email: userEmail });
-      if (existingStudent) {
-        return res.status(409).json({
-          success: false,
-          message: "A student registration with this email already exists",
-        });
-      }
-    } else {
-      // Auto-generate a unique placeholder email if omitted to bypass MongoDB E11000 null index collision
-      userEmail = `noemail-${Date.now()}-${Math.floor(1000 + Math.random() * 9000)}@ambaquran.internal`;
     }
 
     // Handle photo upload if a file exists
@@ -84,7 +74,7 @@ export const registerStudent = async (req, res, next) => {
     if (error.code === 11000) {
       return res.status(409).json({
         success: false,
-        message: "A student registration with this email already exists",
+        message: "A student record with this roll number already exists",
       });
     }
 
@@ -217,7 +207,7 @@ export const updateStudentStatus = async (req, res, next) => {
     });
   } catch (error) {
     if (error.code === 11000) {
-      return next(new ErrorHandler("Roll number or email already in use", 409));
+      return next(new ErrorHandler("Roll number already in use", 409));
     }
     return next(new ErrorHandler(error.message, 500));
   }
